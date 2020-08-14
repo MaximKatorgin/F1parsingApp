@@ -27,8 +27,8 @@ public class LapTimeReader {
     }
 
     public ArrayList<Racer> getQualificationTimes() {
-        checkFilesOnExists();
-        checkFilesOnEmpty();
+        FileCheck fileCheck = new FileCheck();
+        fileCheck.checkFiles(abbriveations, startTimes, endTimes);
         processQualification();
         racers.sort(Comparator.comparing(Racer::getLapTime));
         return racers;
@@ -39,31 +39,6 @@ public class LapTimeReader {
         processRacersStartTimes();
         processRacersEndTimes();
         setLapTimes();
-    }
-
-    private void checkFilesOnEmpty() {
-        if (abbriveations.length() == 0) {
-            throw new IllegalArgumentException("Empty abbriveations file!");
-        }
-        if (startTimes.length() == 0) {
-            throw new IllegalArgumentException("Empty startTimes file!");
-        }
-        if (endTimes.length() == 0) {
-            throw new IllegalArgumentException("Empty endTimes file!");
-        }
-    }
-
-    private void checkFilesOnExists() {
-        if (!abbriveations.exists()) {
-            throw new IllegalArgumentException("No such abbriveations file!");
-        }
-        if (!startTimes.exists()) {
-            throw new IllegalArgumentException("No such startTimes file!");
-        }
-        if (!endTimes.exists()) {
-            throw new IllegalArgumentException("No such endTimes file!");
-        }
-
     }
 
     private void createRacersList() {

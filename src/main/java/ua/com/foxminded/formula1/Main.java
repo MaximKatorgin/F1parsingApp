@@ -15,12 +15,8 @@ public class Main {
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
+        LapTimeReport lapTimeReport = new LapTimeReport();
+        lapTimeReport.getReport(timesList);
 
-        for (int i = 0; i < timesList.size(); i++) {
-            System.out.println(i + 1 + ". " + timesList.get(i).getRacerLapTimeInfo());
-            if (i == 15) {
-                System.out.println("----------------------------------------");
-            }
-        }
     }
 }
