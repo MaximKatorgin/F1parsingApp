@@ -1,9 +1,5 @@
 package ua.com.foxminded.formula1;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -12,26 +8,32 @@ import java.util.HashMap;
 import java.util.stream.Stream;
 
 public class LapTimeReader {
-    private final File abbriveations;
-    private final File startTimes;
-    private final File endTimes;
+    private ArrayList<String> abbriveations;
+    private ArrayList<String> startTimes;
+    private ArrayList<String> endTimes;
     private final ArrayList<Racer> racers = new ArrayList<>();
 
     private final HashMap<String, LocalDateTime> startTimeList = new HashMap<>();
     private final HashMap<String, LocalDateTime> endTimeList = new HashMap<>();
 
-    public LapTimeReader(File abbriveations, File startTimes, File endTimes) {
-        this.abbriveations = abbriveations;
-        this.startTimes = startTimes;
-        this.endTimes = endTimes;
+    public void setRaceFiles(String abbrivetions, String startTimes, String endTimes) {
+        FileCheck fileCheck = new FileCheck(abbrivetions, startTimes, endTimes);
+        fileCheck.checkFiles();
+        this.abbriveations = fileCheck.getAbbriveationsData();
+        this.startTimes = fileCheck.getStartTimesData();
+        this.endTimes = fileCheck.getEndTimesData();
     }
 
     public ArrayList<Racer> getQualificationTimes() {
-        FileCheck fileCheck = new FileCheck();
-        fileCheck.checkFiles(abbriveations, startTimes, endTimes);
         processQualification();
         racers.sort(Comparator.comparing(Racer::getLapTime));
         return racers;
+    }
+
+    public void printQualificationTimes() {
+        processQualification();
+        LapTimeReport lapTimeReport = new LapTimeReport(this.racers);
+        lapTimeReport.printReport();
     }
 
     private void processQualification() {
@@ -43,27 +45,27 @@ public class LapTimeReader {
 
     private void createRacersList() {
         try {
-            Stream<String> abbriveationsStream = Files.lines(Paths.get(abbriveations.getAbsolutePath()));
+            Stream<String> abbriveationsStream = abbriveations.stream();
             abbriveationsStream.map(this::createRacerFromString).forEach(this.racers::add);
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
     private void processRacersStartTimes() {
         try {
-            Stream<String> lapStartTimesStream = Files.lines(Paths.get(startTimes.getAbsolutePath()));
+            Stream<String> lapStartTimesStream = startTimes.stream();
             lapStartTimesStream.forEach(line -> this.startTimeList.put(line.substring(0,3), this.parseDateTime(line.substring(3))));
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
     private void processRacersEndTimes() {
         try {
-            Stream<String> lapStartTimesStream = Files.lines(Paths.get(endTimes.getAbsolutePath()));
+            Stream<String> lapStartTimesStream = endTimes.stream();
             lapStartTimesStream.forEach(line -> this.endTimeList.put(line.substring(0,3), this.parseDateTime(line.substring(3))));
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }

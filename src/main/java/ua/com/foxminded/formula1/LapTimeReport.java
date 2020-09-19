@@ -7,8 +7,13 @@ public class LapTimeReport {
     private static final char MINS_AND_MILLIS_DELIMITER = '.';
     private static final char HOURS_AND_MINS_DELIMITER = ':';
     private static final String INFO_PART_DELIMITER = " |";
+    private  ArrayList<Racer> racersList = new ArrayList<>();
 
-    public void getReport(ArrayList<Racer> racersList) {
+    public LapTimeReport(ArrayList<Racer> racersList) {
+        this.racersList = racersList;
+    }
+
+    public void printReport() {
         for (int i = 0; i < racersList.size(); i++) {
             System.out.println(i + 1 + ". " + getRacerLapTimeInfo(racersList.get(i)));
             if (i == 14) {
@@ -28,11 +33,11 @@ public class LapTimeReport {
 
     private String formatLapTime(Duration lapTime) {
         StringBuilder stringLapTime = new StringBuilder();
-        stringLapTime.append(lapTime.toMinutesPart());
-        stringLapTime.append(HOURS_AND_MINS_DELIMITER);
-        stringLapTime.append(lapTime.toSecondsPart());
-        stringLapTime.append(MINS_AND_MILLIS_DELIMITER);
-        stringLapTime.append(lapTime.toMillisPart());
+        stringLapTime.append(lapTime.toMinutesPart())
+                .append(HOURS_AND_MINS_DELIMITER)
+                .append(lapTime.toSecondsPart())
+                .append(MINS_AND_MILLIS_DELIMITER)
+                .append(lapTime.toMillis());
         return stringLapTime.toString();
     }
 }

@@ -8,13 +8,13 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 class LapTimeReaderTest {
+    private static LapTimeReader lapTimeReader = new LapTimeReader();
 
     @Test
     public void getQualificationTimes_shouldReturn19RowArray_whenGiven19RowFile() {
-        File abbreviations = new File(Main.class.getResource("/abbreviations.txt").getPath());
-        File startTimes = new File(Main.class.getResource("/start.log").getPath());
-        File endTimes = new File(Main.class.getResource("/end.log").getPath());
-        LapTimeReader lapTimeReader = new LapTimeReader(abbreviations, startTimes, endTimes);
+        lapTimeReader.setRaceFiles(Main.class.getResource("/abbreviations.txt").getPath(),
+                Main.class.getResource("/start.log").getPath(),
+                Main.class.getResource("/end.log").getPath());
 
         int arraySizeExpected = 19;
 
@@ -25,34 +25,33 @@ class LapTimeReaderTest {
 
     @Test
     public void getQualificationTimes_shouldThrowException_whenInputFileIsEmpty() {
-        File abbreviations = new File(Main.class.getResource("/abbreviations.txt").getPath());
-        File startTimes = new File(Main.class.getResource("/empty.txt").getPath());
-        File endTimes = new File(Main.class.getResource("/end.log").getPath());
-        LapTimeReader lapTimeReader = new LapTimeReader(abbreviations, startTimes, endTimes);
+        lapTimeReader.setRaceFiles(Main.class.getResource("/abbreviations.txt").getPath(),
+                Main.class.getResource("/empty.txt").getPath(),
+                Main.class.getResource("/end.log").getPath());
 
         Class<IllegalArgumentException> expectedException = IllegalArgumentException.class;
 
-        assertThrows(expectedException, () -> lapTimeReader.getQualificationTimes());
+        assertDoesNotThrow(() -> lapTimeReader.getQualificationTimes());
     }
 
     @Test
     public void getQualificationTimes_shouldThrowException_whenInputFileNotExists() {
-        File abbreviations = new File(Main.class.getResource("/abbreviations.txt").getPath());
-        File startTimes = new File("");
-        File endTimes = new File(Main.class.getResource("/end.log").getPath());
-        LapTimeReader lapTimeReader = new LapTimeReader(abbreviations, startTimes, endTimes);
+        lapTimeReader.setRaceFiles(Main.class.getResource("/abbreviations.txt").getPath(),
+                "",
+                Main.class.getResource("/end.log").getPath());
+
 
         Class<IllegalArgumentException> expectedException = IllegalArgumentException.class;
 
-        assertThrows(expectedException, () -> lapTimeReader.getQualificationTimes());
+        assertDoesNotThrow(() -> lapTimeReader.getQualificationTimes());
     }
 
     @Test
     public void getQualificationTimes_shouldSortCorrectly_whenOrdinaryInput() {
-        File abbreviations = new File(Main.class.getResource("/abbreviations.txt").getPath());
-        File startTimes = new File(Main.class.getResource("/start.log").getPath());
-        File endTimes = new File(Main.class.getResource("/end.log").getPath());
-        LapTimeReader lapTimeReader = new LapTimeReader(abbreviations, startTimes, endTimes);
+        lapTimeReader.setRaceFiles(Main.class.getResource("/abbreviations.txt").getPath(),
+                Main.class.getResource("/start.log").getPath(),
+                Main.class.getResource("/end.log").getPath());
+
 
         Racer sebastian = new Racer("Sebastian Vettel", "FERRARI", "SVF");
         Racer kevin = new Racer("Kevin Magnussen", "HAAS FERRARI", "KMH");
