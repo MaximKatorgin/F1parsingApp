@@ -7,7 +7,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.stream.Stream;
 
-public class LapTimeReader {
+public class RaceFileParser {
     private ArrayList<String> abbriveations;
     private ArrayList<String> startTimes;
     private ArrayList<String> endTimes;
@@ -16,24 +16,15 @@ public class LapTimeReader {
     private final HashMap<String, LocalDateTime> startTimeList = new HashMap<>();
     private final HashMap<String, LocalDateTime> endTimeList = new HashMap<>();
 
-    public void setRaceFiles(String abbrivetions, String startTimes, String endTimes) {
-        FileCheck fileCheck = new FileCheck(abbrivetions, startTimes, endTimes);
-        fileCheck.checkFiles();
-        this.abbriveations = fileCheck.getAbbriveationsData();
-        this.startTimes = fileCheck.getStartTimesData();
-        this.endTimes = fileCheck.getEndTimesData();
-    }
-
-    public ArrayList<Racer> getQualificationTimes() {
+    public ArrayList<Racer> parseRaceFiles(String abbrivetionsPath, String startTimesPath, String endTimesPath) {
+        RaceFileValidator raceFileValidator = new RaceFileValidator();
+        raceFileValidator.validateRaceFiles(abbrivetionsPath, startTimesPath, endTimesPath);
+        RaceFileReader raceFileReader = new RaceFileReader();
+        this.abbriveations = raceFileReader.getAbbriveationsData(abbrivetionsPath);
+        this.startTimes = raceFileReader.getStartTimesData(startTimesPath);
+        this.endTimes = raceFileReader.getEndTimesData(endTimesPath);
         processQualification();
-        racers.sort(Comparator.comparing(Racer::getLapTime));
         return racers;
-    }
-
-    public void printQualificationTimes() {
-        processQualification();
-        LapTimeReport lapTimeReport = new LapTimeReport(this.racers);
-        lapTimeReport.printReport();
     }
 
     private void processQualification() {
@@ -41,6 +32,7 @@ public class LapTimeReader {
         processRacersStartTimes();
         processRacersEndTimes();
         setLapTimes();
+        racers.sort(Comparator.comparing(Racer::getLapTime));
     }
 
     private void createRacersList() {
@@ -64,14 +56,16 @@ public class LapTimeReader {
     private void processRacersEndTimes() {
         try {
             Stream<String> lapStartTimesStream = endTimes.stream();
-            lapStartTimesStream.forEach(line -> this.endTimeList.put(line.substring(0,3), this.parseDateTime(line.substring(3))));
+            lapStartTimesStream.forEach(line -> this.endTimeList.put(line.substring(0,3),
+                    this.parseDateTime(line.substring(3))));
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
     private void setLapTimes() {
-        racers.forEach( racer -> racer.setLapTime(startTimeList.get(racer.getAbbriveation()), endTimeList.get(racer.getAbbriveation())));
+        racers.forEach( racer -> racer.setLapTime(startTimeList.get(racer.getAbbriveation()),
+                endTimeList.get(racer.getAbbriveation())));
     }
 
     private LocalDateTime parseDateTime(String line) {
