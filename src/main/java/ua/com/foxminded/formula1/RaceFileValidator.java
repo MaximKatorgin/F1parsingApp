@@ -4,40 +4,39 @@ import java.io.File;
 
 public class RaceFileValidator {
 
-    public void validateRaceFiles(String abbreviations, String startTimes, String endTimes){
+    public void validateRaceFile(String filePath){
         try {
-            File abbreviationsFile = new File(abbreviations);
-            File startTimesFile = new File(startTimes);
-            File endTimesFile = new File(endTimes);
-            checkFilesOnExists(abbreviationsFile, startTimesFile, endTimesFile);
-            checkFilesOnEmpty(abbreviationsFile, startTimesFile, endTimesFile);
+            File raceDataFile = new File(filePath);
+            checkFileOnExist(raceDataFile);
+            checkIsNotDirectory(raceDataFile);
+            checkIsReadable(raceDataFile);
+            checkFileOnEmpty(raceDataFile);
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
     }
 
-    private void checkFilesOnEmpty(File abbriveations, File startTimes, File endTimes) {
-        if (abbriveations.length() == 0) {
-            throw new IllegalArgumentException("Empty abbreviations file!");
-        }
-        if (startTimes.length() == 0) {
-            throw new IllegalArgumentException("Empty startTimes file!");
-        }
-        if (endTimes.length() == 0) {
-            throw new IllegalArgumentException("Empty endTimes file!");
+    private void checkIsReadable(File raceDataFile) {
+        if (!raceDataFile.canRead()) {
+            throw new IllegalArgumentException("File " + raceDataFile.getName() + " is not readable!");
         }
     }
 
-    private void checkFilesOnExists(File abbriveations, File startTimes, File endTimes) {
-        if (!abbriveations.exists()) {
-            throw new IllegalArgumentException("No such abbreviations file!");
+    private void checkIsNotDirectory(File raceDataFile) {
+        if (raceDataFile.isDirectory()) {
+            throw new IllegalArgumentException("File " + raceDataFile.getName() + " is directory!");
         }
-        if (!startTimes.exists()) {
-            throw new IllegalArgumentException("No such startTimes file!");
-        }
-        if (!endTimes.exists()) {
-            throw new IllegalArgumentException("No such endTimes file!");
-        }
+    }
 
+    private void checkFileOnEmpty(File raceDataFile) {
+        if (raceDataFile.length() == 0) {
+            throw new IllegalArgumentException("Empty file " + raceDataFile.getName() + "!");
+        }
+    }
+
+    private void checkFileOnExist(File raceDataFile) {
+        if (!raceDataFile.exists()) {
+            throw new IllegalArgumentException("No such file " + raceDataFile.getName() + "!");
+        }
     }
 }
