@@ -9,7 +9,6 @@ public class Racer {
     private String abbriveation;
     private LocalDateTime lapStartTime;
     private LocalDateTime lapEndTime;
-    private Duration lapTime;
 
 
     public String getName() {
@@ -27,19 +26,18 @@ public class Racer {
     }
 
     public Duration getLapTime() {
-        return lapTime;
+        return Duration.between(lapStartTime, lapEndTime);
     }
 
     public String getAbbriveation() {
         return abbriveation;
     }
 
-    public void setLapTime(LocalDateTime lapStartTime, LocalDateTime lapEndTime) {
+    public void setLapStartTime(LocalDateTime lapStartTime) {
         this.lapStartTime = lapStartTime;
-        this.lapEndTime = lapEndTime;
-        this.lapTime = Duration.between(lapStartTime, lapEndTime);
     }
 
-
-
+    public void setLapEndTime(LocalDateTime lapEndTime) {
+        this.lapEndTime = lapEndTime;
+    }
 }

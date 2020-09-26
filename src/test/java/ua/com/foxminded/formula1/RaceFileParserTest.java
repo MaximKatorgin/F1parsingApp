@@ -23,9 +23,7 @@ class RaceFileParserTest {
     }
 
     @Test
-    public void getQualificationTimes_shouldThrowException_whenInputFileIsEmpty() {
-        Class<IllegalArgumentException> expectedException = IllegalArgumentException.class;
-
+    public void getQualificationTimes_shouldNotThrowException_whenInputFileIsEmpty() {
         assertDoesNotThrow(() -> raceFileParser.parseRaceFiles
                 (Main.class.getResource("/abbreviations.txt").getPath(),
                         Main.class.getResource("/empty.txt").getPath(),
@@ -33,15 +31,7 @@ class RaceFileParserTest {
     }
 
     @Test
-    public void getQualificationTimes_shouldThrowException_whenInputFileNotExists() {
-        ArrayList<Racer> timeList = raceFileParser.parseRaceFiles
-                (Main.class.getResource("/abbreviations.txt").getPath(),
-                "",
-                Main.class.getResource("/end.log").getPath());
-
-
-        Class<IllegalArgumentException> expectedException = IllegalArgumentException.class;
-
+    public void getQualificationTimes_shouldNotThrowException_whenInputFileNotExists() {
         assertDoesNotThrow(() -> raceFileParser.parseRaceFiles
                 (Main.class.getResource("/abbreviations.txt").getPath(),
                         "",
@@ -55,13 +45,13 @@ class RaceFileParserTest {
                 Main.class.getResource("/start.log").getPath(),
                 Main.class.getResource("/end.log").getPath());
 
-
+        RaceReportBuilder raceReportBuilder = new RaceReportBuilder(timeList);
         Racer sebastian = new Racer("Sebastian Vettel", "FERRARI", "SVF");
         Racer kevin = new Racer("Kevin Magnussen", "HAAS FERRARI", "KMH");
 
 
-        assertEquals(sebastian.getAbbriveation(), timeList.get(0).getAbbriveation());
-        assertEquals(kevin.getAbbriveation(), timeList.get(timeList.size() - 1).getAbbriveation());
+        assertEquals(sebastian.getAbbriveation(), raceReportBuilder.getReportInList().get(0).getAbbriveation());
+        assertEquals(kevin.getAbbriveation(), raceReportBuilder.getReportInList().get(timeList.size() - 1).getAbbriveation());
     }
 
 }

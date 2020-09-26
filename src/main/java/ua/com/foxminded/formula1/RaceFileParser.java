@@ -9,9 +9,6 @@ public class RaceFileParser {
     private final RaceFileValidator raceFileValidator = new RaceFileValidator();
     private final RaceFileReader raceFileReader = new RaceFileReader();
 
-    private final HashMap<String, LocalDateTime> startTimeList = new HashMap<>();
-    private final HashMap<String, LocalDateTime> endTimeList = new HashMap<>();
-
     public ArrayList<Racer> parseRaceFiles(String abbrivetionsPath, String startTimesPath, String endTimesPath) {
         raceFileValidator.validateRaceFile(abbrivetionsPath);
         raceFileValidator.validateRaceFile(startTimesPath);
@@ -25,35 +22,34 @@ public class RaceFileParser {
 
     private ArrayList<Racer> processQualification(List<String> abbriveationsList, List<String> startTimes, List<String> endTimes) {
         ArrayList<Racer> racersList = new ArrayList<>();
-        createRacersList(abbriveationsList, racersList);
-        processRacersTime(startTimes, this.startTimeList);
-        processRacersTime(endTimes, this.endTimeList);
-        setLapTimes(racersList, this.startTimeList, this.endTimeList);
-        racersList.sort(Comparator.comparing(Racer::getLapTime));
+        createRacersList(abbriveationsList, racersList, startTimes, endTimes);
         return racersList;
     }
 
-    private void createRacersList(List<String> abbriveations, List<Racer> racersList) {
+    private void createRacersList(List<String> abbriveations, List<Racer> racersList, List<String> startTimes, List<String> endTimes) {
+        HashMap<String, LocalDateTime> startTimeList = processRacersTime(startTimes);
+        HashMap<String, LocalDateTime> endTimeList = processRacersTime(endTimes);
         try {
             Stream<String> abbriveationsStream = abbriveations.stream();
-            abbriveationsStream.map(this::createRacerFromString).forEach(racersList::add);
+            abbriveationsStream.map(this::createRacerFromString).map(racer -> {
+                racer.setLapStartTime(startTimeList.get(racer.getAbbriveation()));
+                racer.setLapEndTime(endTimeList.get(racer.getAbbriveation()));
+                return racer;})
+                    .forEach(racersList::add);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
-    private void processRacersTime(List<String> timeList, HashMap<String, LocalDateTime> racersTimeHashMap) {
+    private HashMap<String, LocalDateTime> processRacersTime(List<String> timeList) {
+        HashMap<String, LocalDateTime> racersTimeHashMap = new HashMap<>();
         try{
             Stream<String> lapTimesStream = timeList.stream();
             lapTimesStream.forEach(line -> racersTimeHashMap.put(line.substring(0,3), this.parseDateTime(line.substring(3))));
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-    }
-
-    private void setLapTimes(List<Racer> racersList, Map<String, LocalDateTime> startTimeList, Map<String, LocalDateTime> endTimeList) {
-        racersList.forEach( racer -> racer.setLapTime(startTimeList.get(racer.getAbbriveation()),
-                endTimeList.get(racer.getAbbriveation())));
+        return racersTimeHashMap;
     }
 
     private LocalDateTime parseDateTime(String line) {
