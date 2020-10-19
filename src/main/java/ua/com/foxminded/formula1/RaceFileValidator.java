@@ -5,14 +5,24 @@ import java.io.File;
 public class RaceFileValidator {
 
     public void validateRaceFile(String filePath){
-        try {
-            File raceDataFile = new File(filePath);
-            checkFileOnExist(raceDataFile);
-            checkIsNotDirectory(raceDataFile);
-            checkIsReadable(raceDataFile);
-            checkFileOnEmpty(raceDataFile);
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
+            try {
+                checkFilePath(filePath);
+                File raceDataFile = new File(filePath);
+                checkFileOnExist(raceDataFile);
+                checkIsNotDirectory(raceDataFile);
+                checkIsReadable(raceDataFile);
+                checkFileOnEmpty(raceDataFile);
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage());
+            }
+    }
+
+    private void checkFilePath(String filePath) {
+        if (filePath == null) {
+            throw new IllegalArgumentException("Null file path");
+        }
+        if (filePath == "") {
+            throw new IllegalArgumentException("Null file is empty");
         }
     }
 

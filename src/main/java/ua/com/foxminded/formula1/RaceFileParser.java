@@ -6,8 +6,19 @@ import java.util.*;
 import java.util.stream.Stream;
 
 public class RaceFileParser {
-    private final RaceFileValidator raceFileValidator = new RaceFileValidator();
-    private final RaceFileReader raceFileReader = new RaceFileReader();
+    private RaceFileValidator raceFileValidator;
+    private RaceFileReader raceFileReader;
+
+    public RaceFileParser() {
+        this.raceFileValidator = new RaceFileValidator();
+        this.raceFileReader = new RaceFileReader();
+    }
+
+    public RaceFileParser(RaceFileValidator raceFileValidator, RaceFileReader raceFileReader) {
+        this.raceFileReader = raceFileReader;
+        this.raceFileValidator = raceFileValidator;
+
+    }
 
     public ArrayList<Racer> parseRaceFiles(String abbrivetionsPath, String startTimesPath, String endTimesPath) {
         raceFileValidator.validateRaceFile(abbrivetionsPath);
