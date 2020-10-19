@@ -46,7 +46,6 @@ class RaceFileParserTest {
 
     @Test
     public void getQualificationTimes_shouldNotThrowException_whenWrongTimeFormat() {
-        RaceFileParser raceFileParser = new RaceFileParser();
         doNothing().when(mockedRaceFileValidator).validateRaceFile(classLoader.getResource("empty.txt").getPath());
 
         assertDoesNotThrow(() -> raceFileParser.parseRaceFiles(
@@ -57,7 +56,6 @@ class RaceFileParserTest {
 
     @Test
     public void getQualificationTimes_shouldNotThrowException_whenWrongAbbreviatonFormat() {
-        RaceFileParser raceFileParser = new RaceFileParser();
         doNothing().when(mockedRaceFileValidator).validateRaceFile(classLoader.getResource("empty.txt").getPath());
 
         assertDoesNotThrow(() -> raceFileParser.parseRaceFiles(
