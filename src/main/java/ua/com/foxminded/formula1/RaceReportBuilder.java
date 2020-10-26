@@ -1,7 +1,6 @@
 package ua.com.foxminded.formula1;
 
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 

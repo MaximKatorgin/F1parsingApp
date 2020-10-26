@@ -2,7 +2,9 @@ package ua.com.foxminded.formula1;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.stream.Stream;
 
 public class RaceFileParser {
@@ -19,13 +21,13 @@ public class RaceFileParser {
         this.raceFileValidator = raceFileValidator;
     }
 
-    public List<Racer> parseRaceFiles(String abbrivetionsPath, String startTimesPath, String endTimesPath) {
-        raceFileValidator.validateRaceFile(abbrivetionsPath);
+    public List<Racer> parseRaceFiles(String abbriveationsPath, String startTimesPath, String endTimesPath) {
+        raceFileValidator.validateRaceFile(abbriveationsPath);
         raceFileValidator.validateRaceFile(startTimesPath);
         raceFileValidator.validateRaceFile(endTimesPath);
 
         return processQualification(
-                raceFileReader.readFileToList(abbrivetionsPath),
+                raceFileReader.readFileToList(abbriveationsPath),
                 raceFileReader.readFileToList(startTimesPath),
                 raceFileReader.readFileToList(endTimesPath));
     }
