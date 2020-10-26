@@ -3,18 +3,19 @@ package ua.com.foxminded.formula1;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 public class RaceReportBuilder {
     private static final char MINS_AND_MILLIS_DELIMITER = '.';
     private static final char HOURS_AND_MINS_DELIMITER = ':';
     private static final String INFO_PART_DELIMITER = " |";
-    private  ArrayList<Racer> racersList;
+    private List<Racer> racersList;
 
-    public RaceReportBuilder(ArrayList<Racer> racersList) {
+    public RaceReportBuilder(List<Racer> racersList) {
         racersList.sort(Comparator.comparing(Racer::getLapTime));
         this.racersList = racersList;
     }
-    public ArrayList<Racer> getReportInList() {
+    public List<Racer> getReportInList() {
         return this.racersList;
     }
 

@@ -17,10 +17,9 @@ public class RaceFileParser {
     public RaceFileParser(RaceFileValidator raceFileValidator, RaceFileReader raceFileReader) {
         this.raceFileReader = raceFileReader;
         this.raceFileValidator = raceFileValidator;
-
     }
 
-    public ArrayList<Racer> parseRaceFiles(String abbrivetionsPath, String startTimesPath, String endTimesPath) {
+    public List<Racer> parseRaceFiles(String abbrivetionsPath, String startTimesPath, String endTimesPath) {
         raceFileValidator.validateRaceFile(abbrivetionsPath);
         raceFileValidator.validateRaceFile(startTimesPath);
         raceFileValidator.validateRaceFile(endTimesPath);

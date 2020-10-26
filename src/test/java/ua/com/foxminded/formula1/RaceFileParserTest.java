@@ -3,14 +3,14 @@ package ua.com.foxminded.formula1;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+
 import static org.mockito.Mockito.*;
 
 
 class RaceFileParserTest {
     private ClassLoader classLoader = getClass().getClassLoader();
-    RaceFileParser raceFileParser = new RaceFileParser();
     private RaceFileValidator mockedRaceFileValidator = mock(RaceFileValidator.class);
     private RaceFileReader mockedRaceFileReader = mock(RaceFileReader.class);
 
@@ -18,7 +18,7 @@ class RaceFileParserTest {
     public void getQualificationTimes_shouldReadFilesThreeTimes_whenGivenThreeFiles() {
         RaceFileParser mockedRaceFileParser = new RaceFileParser(mockedRaceFileValidator, mockedRaceFileReader);
 
-        ArrayList<Racer> timeList = mockedRaceFileParser.parseRaceFiles(
+        List<Racer> timeList = mockedRaceFileParser.parseRaceFiles(
                 classLoader.getResource("abbreviations.txt").getPath(),
                 classLoader.getResource("start.log").getPath(),
                 classLoader.getResource("end.log").getPath());
@@ -33,7 +33,7 @@ class RaceFileParserTest {
     public void getQualificationTimes_shouldValidateThreeFiles_whenGivenThreeFiles() {
         RaceFileParser mockedRaceFileParser = new RaceFileParser(mockedRaceFileValidator, mockedRaceFileReader);
 
-        ArrayList<Racer> timeList = mockedRaceFileParser.parseRaceFiles(
+        List<Racer> timeList = mockedRaceFileParser.parseRaceFiles(
                 classLoader.getResource("abbreviations.txt").getPath(),
                 classLoader.getResource("start.log").getPath(),
                 classLoader.getResource("end.log").getPath());
@@ -43,30 +43,4 @@ class RaceFileParserTest {
         verify(mockedRaceFileValidator).validateRaceFile(classLoader.getResource("start.log").getPath());
         verify(mockedRaceFileValidator).validateRaceFile(classLoader.getResource("end.log").getPath());
     }
-
-    @Test
-    public void getQualificationTimes_shouldNotThrowException_whenWrongTimeFormat() {
-        doNothing().when(mockedRaceFileValidator).validateRaceFile(classLoader.getResource("empty.txt").getPath());
-
-        assertDoesNotThrow(() -> raceFileParser.parseRaceFiles(
-                classLoader.getResource("abbreviations.txt").getPath(),
-                classLoader.getResource("empty.txt").getPath(),
-                classLoader.getResource("end.log").getPath()));
-    }
-
-    @Test
-    public void getQualificationTimes_shouldNotThrowException_whenWrongAbbreviatonFormat() {
-        doNothing().when(mockedRaceFileValidator).validateRaceFile(classLoader.getResource("empty.txt").getPath());
-
-        assertDoesNotThrow(() -> raceFileParser.parseRaceFiles(
-                classLoader.getResource("empty.txt").getPath(),
-                classLoader.getResource("start.log").getPath(),
-                classLoader.getResource("end.log").getPath()));
-    }
-
-
-
-
-
-
 }

@@ -1,11 +1,12 @@
 package ua.com.foxminded.formula1;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
         RaceFileParser raceFileParser = new RaceFileParser();
-        ArrayList<Racer> racerList = new ArrayList<>();
+        List<Racer> racerList = new ArrayList<>();
         try {
             racerList = raceFileParser.parseRaceFiles(Main.class.getResource("/abbreviations.txt").getPath(),
                                         Main.class.getResource("/start.log").getPath(),

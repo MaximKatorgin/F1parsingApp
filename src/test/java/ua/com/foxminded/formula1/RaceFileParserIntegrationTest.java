@@ -3,6 +3,7 @@ package ua.com.foxminded.formula1;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -11,7 +12,7 @@ public class RaceFileParserIntegrationTest {
     RaceFileParser raceFileParser = new RaceFileParser();
     @Test
     public void getQualificationTimes_shouldReturn19RowArray_whenGiven19RowFile() {
-        ArrayList<Racer> timeList = raceFileParser.parseRaceFiles(
+        List<Racer> timeList = raceFileParser.parseRaceFiles(
                 classLoader.getResource("abbreviations.txt").getPath(),
                 classLoader.getResource("start.log").getPath(),
                 classLoader.getResource("end.log").getPath());
@@ -23,7 +24,7 @@ public class RaceFileParserIntegrationTest {
 
     @Test
     public void getQualificationTimes_shouldSortCorrectly_whenOrdinaryInput() {
-        ArrayList<Racer> timeList = raceFileParser.parseRaceFiles
+        List<Racer> timeList = raceFileParser.parseRaceFiles
                 (classLoader.getResource("abbreviations.txt").getPath(),
                         classLoader.getResource("start.log").getPath(),
                         classLoader.getResource("end.log").getPath());
