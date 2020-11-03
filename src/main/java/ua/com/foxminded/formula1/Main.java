@@ -9,7 +9,7 @@ public class Main {
         List<Racer> racerList = new ArrayList<>();
         try {
             racerList = raceFileParser.parseRaceFiles(Main.class.getResource("/abbreviations.txt").getPath(),
-                                        Main.class.getResource("/start.log").getPath(),
+                                        Main.class.getResource("/empty.txt").getPath(),
                                         Main.class.getResource("/end.log").getPath());
         } catch (Exception ex) {
             ex.printStackTrace();
